@@ -3,7 +3,8 @@
         <div class="container">
             <ul>
                 <li @click="$router.push({name:'moviedetails',params:{id:items.id}})" v-for="(items,index) in dataList" :key="index+'dl'">
-                    <div><img class="movieImg" :src="items.images.small" alt=""></div>
+                    <!-- getImg(items.images.small) -->
+                    <div><img class="movieImg" :src="getImg(items.images.small)" alt=""></div>
                     <div class="movieInfo clearfix" >
                         <div class="movieTitle">{{items.title}}</div>
                         <div>
@@ -89,18 +90,23 @@
             }
         },
         methods:{
-            //API_PROXY+'https://api.douban.com/v2/movie/in_theaters'
             getData(){
                 this.isFinish = false;
+                //https://api.myjson.com/bins/nsb9g
+                //API_PROXY+'https://api.douban.com/v2/movie/in_theaters'+'?start='+this.data.length+'&count='+this.data.num
                 axios.get('https://api.myjson.com/bins/nsb9g')
                     .then((response) => {
                         this.dataList = this.dataList.concat(response.data.subjects);
                         this.isFinish = true;
                     })
                     .catch((error) => {
-
+                        console.log('err');
                     });
-//+?start=this.data.length+'&count='+this.data.num
+            },
+            getImg(url){
+                if(url !== undefined){
+                    return 'https://images.weserv.nl/?url='+url.slice(8);
+                }
             }
         },
         mounted(){
